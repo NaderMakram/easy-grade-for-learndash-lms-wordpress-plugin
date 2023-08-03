@@ -13,6 +13,12 @@
 // ////////////////////////////////////////////////////////////////////////////
 
 
+
+if (!class_exists('GitUpdater\GitUpdater')) {
+    include_once 'git-updater/GitUpdater.php';
+}
+
+
 //  feature number #1 remove post action links for group leaders 
 function remove_post_row_actions($actions) {
     global $post;
@@ -176,7 +182,7 @@ add_filter('manage_sfwd-assignment_posts_columns', 'custom_sfwd_assignment_posts
 function custom_sfwd_assignment_posts_table_column($columns) {
     // Add a new column with a header for the audio player
     $columns['custom_audio_column'] = 'Audio Player';
-
+    
     // Return the modified columns array
     return $columns;
 }
@@ -189,18 +195,47 @@ function populate_custom_sfwd_assignment_posts_table_column($column_name, $post_
     if ($column_name === 'custom_audio_column') {
         // Retrieve the post content
         $post_content = get_post_field('post_content', $post_id);
-
+        
         // Use the pattern to extract the audio URL from the post_content
         $pattern = '/<a\s+(?:[^>]*?\s+)?href=("|\')(.*?)\1/';
         preg_match($pattern, $post_content, $matches);
-
+        
         // Extract the audio URL from the match or set to empty string
         $audio_url = !empty($matches) && count($matches) >= 3 ? $matches[2] : '';
-
+        
         // Output the audio player in the column cell
         echo '<audio controls>';
         echo '<source src="' . esc_attr($audio_url) . '" type="audio/mpeg">';
         echo 'Your browser does not support the audio element.';
         echo '</audio>';
+    }
+}
+
+
+
+
+
+
+
+// ////////////////////////////////////////////////////////////////////////////
+add_action('init', 'my_custom_plugin_git_updater');
+function my_custom_plugin_git_updater()
+{
+    if (is_admin() && class_exists('GitUpdater\GitUpdater')) {
+        $config = array(
+            'slug' => plugin_basename(__FILE__),
+            'proper_folder_name' => 'my-custom-plugin',
+            'api_url' => 'https://api.github.com/repos/NaderMakram/easy-grade-for-learndash-lms-wordpress-plugin',
+            'raw_url' => 'https://raw.githubusercontent.com/NaderMakram/easy-grade-for-learndash-lms-wordpress-plugin/main',
+            'github_url' => 'https://github.com/NaderMakram/easy-grade-for-learndash-lms-wordpress-plugin',
+            'zip_url' => 'https://github.com/NaderMakram/easy-grade-for-learndash-lms-wordpress-plugin/archive/main.zip',
+            'sslverify' => true,
+            'requires' => '5.0',
+            'tested' => '5.8',
+            'readme' => 'README.md',
+            'access_token' => '', // Optional: Add your GitHub personal access token for private repositories.
+        );
+
+        new GitUpdater\GitUpdater($config);
     }
 }
