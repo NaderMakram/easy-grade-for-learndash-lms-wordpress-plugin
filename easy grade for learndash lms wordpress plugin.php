@@ -2,7 +2,8 @@
 /*
  * Plugin Name: Easy Grade for learndash lms
  * Description: This plugin adds extra fields to make it easier for group leaders to grade quizzes or audio assignments from the submitted essay(or assignment) table.  
- * Version: 0.2
+ * Version: 0.3
+ * Author: Nader Makram
  * GitHub Plugin URI:  https://github.com/NaderMakram/easy-grade-for-learndash-lms-wordpress-plugin
  * Primary Branch: master
  * Release Asset: true
