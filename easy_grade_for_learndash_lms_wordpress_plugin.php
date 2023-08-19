@@ -15,13 +15,6 @@
 
 
 
-
-
-if (!class_exists('GitUpdater\GitUpdater')) {
-    include_once 'git-updater/GitUpdater.php';
-}
-
-
 //  feature number #1 remove post action links for group leaders 
 function remove_post_row_actions($actions) {
     global $post;
@@ -211,34 +204,5 @@ function populate_custom_sfwd_assignment_posts_table_column($column_name, $post_
         echo '<source src="' . esc_attr($audio_url) . '" type="audio/mpeg">';
         echo 'Your browser does not support the audio element.';
         echo '</audio>';
-    }
-}
-
-
-
-
-
-
-
-// ////////////////////////////////////////////////////////////////////////////
-add_action('init', 'my_custom_plugin_git_updater');
-function my_custom_plugin_git_updater()
-{
-    if (is_admin() && class_exists('GitUpdater\GitUpdater')) {
-        $config = array(
-            'slug' => plugin_basename(__FILE__),
-            'proper_folder_name' => 'my-custom-plugin',
-            'api_url' => 'https://api.github.com/repos/NaderMakram/easy-grade-for-learndash-lms-wordpress-plugin',
-            'raw_url' => 'https://raw.githubusercontent.com/NaderMakram/easy-grade-for-learndash-lms-wordpress-plugin/main',
-            'github_url' => 'https://github.com/NaderMakram/easy-grade-for-learndash-lms-wordpress-plugin',
-            'zip_url' => 'https://github.com/NaderMakram/easy-grade-for-learndash-lms-wordpress-plugin/archive/main.zip',
-            'sslverify' => true,
-            'requires' => '5.0',
-            'tested' => '5.8',
-            'readme' => 'README.md',
-            'access_token' => '', // Optional: Add your GitHub personal access token for private repositories.
-        );
-
-        new GitUpdater\GitUpdater($config);
     }
 }
